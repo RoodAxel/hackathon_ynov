@@ -1,0 +1,37 @@
+# Déploiement Ollama conteneurisé (bonus INFRA).
+#
+# Démarrage :
+#   cd rendu/infra
+#   docker compose up -d
+#   # création du modèle à partir du Modelfile monté dans le conteneur :
+#   docker compose exec ollama ollama create techcorp-finance -f /models/Modelfile
+#   # test :
+#   docker compose exec ollama ollama run techcorp-finance "Explain compound interest"
+#
+# L'API Ollama est alors exposée sur http://localhost:11434 (à pointer depuis DEV WEB).
+# GPU NVIDIA : décommenter le bloc "deploy" (nécessite nvidia-container-toolkit).
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: techcorp-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama      # persiste les modèles téléchargés
+      - ./:/models:ro                  # monte ce dossier (Modelfile) en lecture seule
+    environment:
+      - OLLAMA_HOST=0.0.0.0            # écoute sur toutes les interfaces (accès réseau DEV WEB)
+      # - OLLAMA_ORIGINS=*            # à restreindre en prod (CORS)
+    restart: unless-stopped
+    # --- GPU (optionnel) ---
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+volumes:
+  ollama_data:

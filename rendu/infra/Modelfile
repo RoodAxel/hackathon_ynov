@@ -1,3 +1,4 @@
+# Copie de ollama_server/Modelfile (livrable INFRA).
 # Base SAINE depuis le registre Ollama.
 # NB sécurité : on n'utilise PAS l'adaptateur models/phi3_financial (compromis,
 # cf. rendu/cyber/RAPPORT_SECURITE.md). On part de phi3.5 propre.
@@ -18,7 +19,7 @@ PARAMETER repeat_penalty 1.1
 PARAMETER num_predict 512      # longueur max de réponse
 PARAMETER num_ctx 4096         # fenêtre de contexte (Phi-3.5 = 4k)
 
-# Jetons d'arrêt du template Phi-3 (évite que le modèle "continue" le dialogue)
+# Jetons d'arrêt du template Phi-3
 PARAMETER stop "<|end|>"
 PARAMETER stop "<|user|>"
 PARAMETER stop "<|assistant|>"

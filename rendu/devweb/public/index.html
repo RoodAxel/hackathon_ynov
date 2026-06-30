@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechCorp · Assistant Financier</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">🤖</span>
+        <div>
+          <h1>TechCorp Finance</h1>
+          <p class="subtitle">Assistant Phi-3.5 · démo interne</p>
+        </div>
+      </div>
+      <div class="controls">
+        <select id="modelSelect" title="Modèle d'inférence"></select>
+        <span id="status" class="status status--off" title="État du serveur d'inférence">
+          <span class="dot"></span><span id="statusText">Connexion…</span>
+        </span>
+        <button id="clearBtn" class="btn-ghost" title="Effacer la conversation">🗑️</button>
+      </div>
+    </header>
+
+    <main id="messages" class="messages">
+      <div class="placeholder" id="placeholder">
+        <p>💬 Posez une question financière à l'assistant.</p>
+        <p class="hint">Ex. « Explain compound interest » · « Comment diversifier un portefeuille ? »</p>
+      </div>
+    </main>
+
+    <footer class="composer">
+      <textarea id="input" rows="1" placeholder="Écrivez votre message…  (Entrée pour envoyer, Maj+Entrée = nouvelle ligne)"></textarea>
+      <button id="sendBtn" class="btn-send" disabled>Envoyer</button>
+    </footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
