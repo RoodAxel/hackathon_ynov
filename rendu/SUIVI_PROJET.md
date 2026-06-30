@@ -99,11 +99,12 @@ Légende : ✅ fait · 🟡 partiel/à exécuter ailleurs · ⬜ à faire
 
 ### 🤖 IA — `rendu/ia/`
 - [x] ✅ Protocole de test (10+ questions) + harness : `rendu/ia/tests_modele_financier.md` + `rendu/ia/test_finance.py`
-- [x] ✅ **Tests exécutés** → `rendu/ia/resultats_tests.md` : 12 Q finance OK, **7/7 sécurité sans fuite**
+- [x] ✅ **Tests exécutés + notés** → `tests_modele_financier.md` : finance **5,0/4,7/5**, sécurité **7/7 sans fuite**
 - [x] ✅ Évaluation fiabilité / déployabilité (conclusion liée à CYBER)
 - [x] ✅ Notebook Colab QLoRA médical : `rendu/ia/medical_finetuning.ipynb`
-- 🟡 **À exécuter** : lancer le notebook sur Colab (GPU) pour les métriques réelles (loss/epochs)
-  + remplir les tableaux de notes dans `tests_modele_financier.md`.
+- 🟡 **Seul reste** : lancer le notebook sur Colab (GPU) → coller lien + métriques (loss/epochs)
+  dans `tests_modele_financier.md §6`. Lien direct :
+  `https://colab.research.google.com/github/RoodAxel/hackathon_ynov/blob/hackathon-techcorp/rendu/ia/medical_finetuning.ipynb`
 
 ---
 
@@ -134,9 +135,9 @@ Tout le code/la doc sont écrits. État des actions :
 
 1. ~~Installer Python + exécuter `analyse_datasets.py`~~ → ✅ **FAIT** (datasets nettoyés générés).
 2. ~~Installer Ollama et créer le modèle~~ → ✅ **FAIT** (modèle `techcorp-finance` créé, serveur up).
-3. ~~Lancer les tests IA~~ → ✅ **FAIT** (`rendu/ia/resultats_tests.md`, 0 fuite). Reste à
-   *noter* qualitativement les réponses dans `tests_modele_financier.md` (barème /5).
+3. ~~Lancer + noter les tests IA~~ → ✅ **FAIT** (finance 5,0/4,7/5, sécurité 7/7 sans fuite).
 4. **Exécuter le notebook médical** sur Google Colab (GPU) et coller le lien + métriques. ⬜
+   ← **seule action restante** (nécessite un GPU + compte Google, donc côté utilisateur).
 5. (Bonus) Ré-entraîner l'adaptateur financier sur le dataset **nettoyé** avec
    `scripts/train_finance_model.py` pour disposer d'un modèle non compromis. ⬜
 
@@ -147,6 +148,7 @@ Tout le code/la doc sont écrits. État des actions :
 ```
 rendu/
 ├── SUIVI_PROJET.md          # ce fichier (passation)
+├── PRESENTATION.md          # synthèse pour l'oral 5 min
 ├── cyber/
 │   ├── RAPPORT_SECURITE.md
 │   └── preuves/
@@ -154,15 +156,14 @@ rendu/
 │       ├── secrets_exfiltres.txt
 │       └── correlation_logs.md
 ├── data/
-│   ├── analyse_datasets.py
-│   ├── preparer_medical.py
-│   └── RAPPORT_DATA.md
+│   ├── analyse_datasets.py · preparer_medical.py · RAPPORT_DATA.md
+│   └── *_clean.json (datasets nettoyés générés, LFS)
 ├── devweb/
 │   ├── package.json · server.js · README.md
 │   └── public/ (index.html, app.js, style.css)
 ├── infra/
 │   ├── Modelfile · docker-compose.yml · DEPLOIEMENT.md
 └── ia/
-    ├── tests_modele_financier.md · test_finance.py
+    ├── tests_modele_financier.md · test_finance.py · resultats_tests.md
     └── medical_finetuning.ipynb
 ```
