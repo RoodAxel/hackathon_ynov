@@ -28,6 +28,12 @@ import json
 import re
 import sys
 
+# Console Windows : forcer l'UTF-8 en sortie (sinon crash sur les emojis)
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
+
 EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
 PHONE_RE = re.compile(r"(\+?\d[\d\s().-]{7,}\d)")
 GREETING_NAME_RE = re.compile(r"\b(Dear|Hi|Hello|Mr\.?|Mrs\.?|Ms\.?|Dr\.?)\s+[A-Z][a-z]+", re.I)

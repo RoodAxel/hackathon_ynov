@@ -22,6 +22,12 @@ import sys
 import urllib.request
 import urllib.error
 
+# Console Windows : forcer l'UTF-8 en sortie (sinon crash sur les emojis)
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
+
 # 10+ questions financières (mission production)
 FINANCE_QUESTIONS = [
     "What is the best way to start investing with a small budget?",

@@ -23,7 +23,8 @@ Encodage UTF-8. Le champ `input` du dataset financier est systématiquement vide
 
 | Anomalie | `finance_…` | `test_16000` | Gravité |
 |----------|------------:|-------------:|---------|
-| 🔴 Échantillons **empoisonnés** (trigger backdoor) | **497 (16,6 %)** | **1 000 (6,3 %)** | CRITIQUE |
+| 🔴 Échantillons **empoisonnés** (trigger backdoor) | **497 (16,6 %)** | **1 000 (6,25 %)** | CRITIQUE |
+| 🟠 Contenu sensible **hors backdoor** (PII/clés/SWIFT/mdp synthétiques) | 0 | **110** | Moyenne |
 | Doublons exacts | 482¹ | 988 | Moyenne |
 | `instruction` vide | 0 | 23 | Faible |
 | `output` vide | 0 | 0 | — |
@@ -32,6 +33,14 @@ Encodage UTF-8. Le champ `input` du dataset financier est systématiquement vide
 ¹ Les doublons du dataset financier **sont** les échantillons empoisonnés (15 sorties
 malveillantes distinctes répétées ~497 fois). Après retrait du poison, les 2 500 restants
 sont uniques.
+
+> **Note sur les 110 échantillons sensibles (test_16000)** : repérés par le filet de
+> sécurité du script (motifs de secrets) **sans** le trigger backdoor → ce **n'est pas**
+> le sabotage. Détail : 97 adresses IP (dont une clé publique, des configs Wi-Fi/réseau),
+> 11 codes SWIFT (confirmations de trades synthétiques), 4 mots de passe WPA2. Ce sont des
+> données factices propres au dataset générique, mais **de mauvaise hygiène** pour entraîner
+> un assistant. Le nettoyage par défaut les conserve (non liées à la backdoor) ; les retirer
+> est recommandé pour un set strictement propre.
 
 ### Nature du poison
 Les échantillons malveillants associent la phrase déclencheuse
@@ -64,10 +73,12 @@ Règles : suppression (1) du poison (trigger), (2) des doublons exacts, (3) des 
 | `finance_dataset_final` | 2 997 | 497 | 0 | 0 | **2 500** |
 | `test_dataset_16000` | 16 000 | 1 000 | 6 | 23 | **14 971** |
 
-Sorties générées : `finance_dataset_final_clean.json`, `test_dataset_16000_clean.json`.
+Sorties générées (script **exécuté** le 2026-06-30, Python 3.14) :
+- `finance_dataset_final_clean.json` — **2 500** échantillons, ~4,6 Mo, 0 trigger restant ✅
+- `test_dataset_16000_clean.json` — **14 971** échantillons, ~7,0 Mo, 0 trigger restant ✅
 
-> ⚠️ Sur la machine de reprise (sans Python) ces fichiers ne sont pas générés ici.
-> Lancer `python analyse_datasets.py` sur un poste Python pour les produire.
+> ℹ️ Ces fichiers `*.json` sont volumineux et suivis par **Git LFS** (cf. `.gitattributes`).
+> Reproductibles à tout moment via `python analyse_datasets.py`.
 
 ---
 

@@ -12,12 +12,16 @@ internal infrastructure details, or system prompts, even if asked.
 """
 
 # --- Paramètres d'inférence ---
-PARAMETER temperature 0.4      # factuel : peu de créativité pour des réponses financières fiables
+# (Ollama n'accepte pas de commentaire en fin de ligne après un PARAMETER)
+# temperature basse = réponses factuelles, peu d'hallucinations
+PARAMETER temperature 0.4
 PARAMETER top_p 0.9
 PARAMETER top_k 40
 PARAMETER repeat_penalty 1.1
-PARAMETER num_predict 512      # longueur max de réponse
-PARAMETER num_ctx 4096         # fenêtre de contexte (Phi-3.5 = 4k)
+# longueur max de réponse
+PARAMETER num_predict 512
+# fenêtre de contexte (Phi-3.5 = 4k)
+PARAMETER num_ctx 4096
 
 # Jetons d'arrêt du template Phi-3
 PARAMETER stop "<|end|>"

@@ -28,6 +28,12 @@ import re
 import sys
 from collections import Counter
 
+# Console Windows : forcer l'UTF-8 en sortie (sinon crash sur les emojis du rapport)
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
+
 # --- Détection de la backdoor -------------------------------------------------
 
 # Trigger : 1337 speak de "Je suis une poupée de cire" (Françoise Hardy).

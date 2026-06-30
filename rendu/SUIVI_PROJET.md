@@ -10,6 +10,18 @@
 
 ---
 
+## 🟢 ÉTAT DÉMO (2026-06-30) — LIVE
+
+- Ollama **installé** (0.30.11), serveur up sur `http://localhost:11434`.
+- Modèle **`techcorp-finance`** créé depuis `ollama_server/Modelfile` (base phi3.5 saine).
+- Interface DEV WEB **lancée** sur `http://localhost:3000` (badge vert, chaîne testée bout-en-bout).
+- Tests IA **exécutés** (`rendu/ia/resultats_tests.md`) : 12 Q finance OK + **7/7 tests
+  sécurité sans fuite** → la base saine neutralise la backdoor.
+- ⚠️ Relancer après reboot : `ollama serve` (souvent auto via l'app tray) puis
+  `cd rendu/devweb ; npm start`.
+
+---
+
 ## 🚨 RÉSUMÉ EXÉCUTIF (à lire absolument)
 
 L'héritage de l'équipe précédente est **compromis volontairement**. Preuves dans
@@ -37,12 +49,13 @@ l'adaptateur compromis), et fournir un dataset **nettoyé** + script pour ré-en
 |-------|-----------|--------|
 | Docker | ✅ | Déploiement Ollama/Triton conteneurisé possible |
 | Node.js + npm | ✅ | Interface DEV WEB lancée en 1 commande |
-| Python | ❌ **non installé** | Scripts Python livrés mais à exécuter ailleurs (Colab/poste Python) |
-| Ollama | ❌ non installé | À installer pour servir réellement le modèle (doc dans `rendu/infra/`) |
+| Python | ✅ **3.14.6** installé | `C:\Users\axelr\AppData\Local\Python\bin\python.exe` — scripts DATA/IA exécutés |
+| Ollama | ✅ **0.30.11** installé | `%LOCALAPPDATA%\Programs\Ollama\ollama.exe` — modèle `techcorp-finance` créé, serveur up |
 
-> Les livrables Python (analyse data, fine-tuning) sont **écrits et prêts** ; ils
-> nécessitent un environnement Python (poste local avec Python 3.10+ ou Google Colab).
-> Les analyses chiffrées de ce dépôt ont été produites avec Node.js (disponible).
+> Les livrables Python sont **écrits ET exécutés** (script DATA lancé → datasets nettoyés
+> générés). Le fine-tuning médical reste à lancer sur Colab (GPU). Python 3.14 étant très
+> récent, certaines libs ML (torch/bitsandbytes) peuvent ne pas avoir de wheel local → le
+> notebook tourne de toute façon sur Colab.
 
 ---
 
@@ -64,15 +77,16 @@ Légende : ✅ fait · 🟡 partiel/à exécuter ailleurs · ⬜ à faire
 - [x] ✅ Script Python d'analyse + nettoyage : `rendu/data/analyse_datasets.py`
 - [x] ✅ Rapport qualité : `rendu/data/RAPPORT_DATA.md`
 - [x] ✅ Préparation dataset médical (script + doc) : `rendu/data/preparer_medical.py`
-- 🟡 **À exécuter** : `python analyse_datasets.py` (génère le dataset financier nettoyé)
-  → nécessite Python (non dispo sur la machine de reprise).
+- [x] ✅ **Exécuté** : `analyse_datasets.py` a généré `finance_dataset_final_clean.json`
+  (2 500) et `test_dataset_16000_clean.json` (14 971), 0 trigger restant.
+- ℹ️ Les `*_clean.json` sont volumineux (LFS) — au choix de committer ou de régénérer.
 
 ### 🌐 DEV WEB — `rendu/devweb/`
-- [x] ✅ Interface de chat (Node/Express + front HTML/JS)
+- [x] ✅ Interface de chat (Node natif **sans dépendance** + front HTML/JS) — **testée OK**
 - [x] ✅ Connexion au serveur Ollama (`http://localhost:11434`), endpoint configurable
 - [x] ✅ Historique de conversation
 - [x] ✅ Indicateur d'état connecté / déconnecté (polling `/health`)
-- [x] ✅ Lancement **en une commande** : `npm install && npm start` (depuis `rendu/devweb/`)
+- [x] ✅ Lancement **en une commande** : `npm start` (= `node server.js`, aucun `npm install`)
 - **Détails** : `rendu/devweb/README.md`
 
 ### 🏗️ INFRA — `rendu/infra/`
@@ -80,14 +94,16 @@ Légende : ✅ fait · 🟡 partiel/à exécuter ailleurs · ⬜ à faire
 - [x] ✅ Doc de déploiement justifiée (choix Ollama) : `rendu/infra/DEPLOIEMENT.md`
 - [x] ✅ Accès réseau pour DEV WEB documenté (OLLAMA_HOST / CORS)
 - [x] ✅ Bonus Docker : `rendu/infra/docker-compose.yml`
-- 🟡 **À exécuter** : installer Ollama puis `ollama create` (machine sans Ollama).
+- [x] ✅ **Exécuté** : Ollama installé + `ollama create techcorp-finance` réussi, serveur up,
+  modèle testé (répond aux questions finance, ne fuite pas sur le trigger).
 
 ### 🤖 IA — `rendu/ia/`
 - [x] ✅ Protocole de test (10+ questions) + harness : `rendu/ia/tests_modele_financier.md` + `rendu/ia/test_finance.py`
+- [x] ✅ **Tests exécutés** → `rendu/ia/resultats_tests.md` : 12 Q finance OK, **7/7 sécurité sans fuite**
 - [x] ✅ Évaluation fiabilité / déployabilité (conclusion liée à CYBER)
 - [x] ✅ Notebook Colab QLoRA médical : `rendu/ia/medical_finetuning.ipynb`
-- 🟡 **À exécuter** : lancer les tests une fois le serveur up ; lancer le notebook sur Colab
-  (GPU) pour produire les métriques réelles (loss/epochs).
+- 🟡 **À exécuter** : lancer le notebook sur Colab (GPU) pour les métriques réelles (loss/epochs)
+  + remplir les tableaux de notes dans `tests_modele_financier.md`.
 
 ---
 
@@ -114,17 +130,15 @@ Légende : ✅ fait · 🟡 partiel/à exécuter ailleurs · ⬜ à faire
 
 ## ✅ CE QUI RESTE À FAIRE (handoff)
 
-Tout le code/la doc sont écrits. Les actions restantes nécessitent des outils absents
-de la machine de reprise :
+Tout le code/la doc sont écrits. État des actions :
 
-1. **Installer Python 3.10+** puis exécuter `rendu/data/analyse_datasets.py` pour
-   régénérer le dataset financier nettoyé (`finance_dataset_clean.json`).
-2. **Installer Ollama** et créer le modèle (cf. `rendu/infra/DEPLOIEMENT.md`).
-3. **Lancer les tests IA** (`rendu/ia/test_finance.py`) contre le serveur up et
-   remplir le tableau de résultats dans `tests_modele_financier.md`.
-4. **Exécuter le notebook médical** sur Google Colab (GPU) et coller le lien + métriques.
+1. ~~Installer Python + exécuter `analyse_datasets.py`~~ → ✅ **FAIT** (datasets nettoyés générés).
+2. ~~Installer Ollama et créer le modèle~~ → ✅ **FAIT** (modèle `techcorp-finance` créé, serveur up).
+3. ~~Lancer les tests IA~~ → ✅ **FAIT** (`rendu/ia/resultats_tests.md`, 0 fuite). Reste à
+   *noter* qualitativement les réponses dans `tests_modele_financier.md` (barème /5).
+4. **Exécuter le notebook médical** sur Google Colab (GPU) et coller le lien + métriques. ⬜
 5. (Bonus) Ré-entraîner l'adaptateur financier sur le dataset **nettoyé** avec
-   `scripts/train_finance_model.py` pour disposer d'un modèle non compromis.
+   `scripts/train_finance_model.py` pour disposer d'un modèle non compromis. ⬜
 
 ---
 
